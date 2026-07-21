@@ -54,6 +54,7 @@ lazy val root = project
     codecJVM,
     codecJS,
     js,
+    wasm,
     cli
   )
 
@@ -380,23 +381,22 @@ lazy val js = project
       _.withModuleKind(ModuleKind.ESModule)
         .withModuleSplitStyle(org.scalajs.linker.interface.ModuleSplitStyle.SmallestModules)
     },
-    Test / scalaJSLinkerConfig ~= { _.withModuleKind(ModuleKind.CommonJSModule) }
+    Test / scalaJSLinkerConfig ~= { _.withModuleKind(ModuleKind.ESModule) }
   )
   .dependsOn(coreJS, codecJS)
 
-// // test if this is worth the effort
-// lazy val wasm = project
-//   .in(file("modules/recheck-wasm"))
-//   .enablePlugins(ScalaJSPlugin)
-//   .settings(
-//     name := "recheck-wasm",
-//     scalaJSLinkerConfig ~= {
-//       _.withModuleKind(ModuleKind.ESModule)
-//         .withExperimentalUseWebAssembly(true)
-//         .withModuleSplitStyle(ModuleSplitStyle.FewestModules)
-//     }
-//   )
-//   .dependsOn(js)
+// see: https://www.scala-js.org/doc/project/webassembly.html
+lazy val wasm = project
+  .in(file("modules/recheck-wasm"))
+  .enablePlugins(ScalaJSPlugin)
+  .settings(
+    name := "recheck-wasm",
+    scalaJSLinkerConfig ~= {
+      _.withModuleKind(ModuleKind.ESModule)
+        .withESFeatures(_.withESVersion(org.scalajs.linker.interface.ESVersion.ES2022).withUseWebAssembly(true))
+    }
+  )
+  .dependsOn(js)
 
 lazy val cli = project
   .in(file("modules/recheck-cli"))
