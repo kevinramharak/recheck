@@ -10,6 +10,8 @@ Fixes:
 - [#1620](https://github.com/makenowjust-labs/recheck/pull/1620) Fix #1616: resolve the windows path issue ([@makenowjust](https://github.com/makenowjust))
 - [#1631](https://github.com/makenowjust-labs/recheck/pull/1631) Switch to pnpm ([@makenowjust](https://github.com/makenowjust))
 - [#1638](https://github.com/makenowjust-labs/recheck/pull/1638) Fix `ReDoS.checkAuto` test for preventing flaky test ([@makenowjust](https://github.com/makenowjust))
+- [#1651](https://github.com/makenowjust-labs/recheck/pull/1651) Update sources to Scala 3 ([@makenowjust](https://github.com/makenowjust))
+- [#1697](https://github.com/makenowjust-labs/recheck/pull/1697) Add `d.ts` to the ESLint plugin ([@makenowjust](https://github.com/makenowjust))
 
 Misc:
 
@@ -27,6 +29,10 @@ Misc:
 - [#1628](https://github.com/makenowjust-labs/recheck/pull/1628) Enable `--forceExit` option of Jest ([@makenowjust](https://github.com/makenowjust))
 - [#1629](https://github.com/makenowjust-labs/recheck/pull/1629) Unref stderr and work test on CI env correctly ([@makenowjust](https://github.com/makenowjust))
 - [#1637](https://github.com/makenowjust-labs/recheck/pull/1637) Use `lerna run test` instead of `pnpm test` ([@makenowjust](https://github.com/makenowjust))
+- [#1650](https://github.com/makenowjust-labs/recheck/pull/1650) Add dependencies for types explicitly ([@makenowjust](https://github.com/makenowjust))
+- [#1652](https://github.com/makenowjust-labs/recheck/pull/1652) Update dependency prettier to v3.7.0 ([@renovate[bot]](https://github.com/apps/renovate))
+- [#1653](https://github.com/makenowjust-labs/recheck/pull/1653) Apply `-rewrite -new-syntax` and `-rewrite -indent` ([@makenowjust](https://github.com/makenowjust))
+- [#1682](https://github.com/makenowjust-labs/recheck/pull/1682) Update icu4j to 78.2 ([@makenowjust](https://github.com/makenowjust))
 
 # 4.5.0 (2025-03-02)
 

@@ -21,15 +21,15 @@ jobs:
     outputs:
       version: ${{ steps.save-version.outputs.version }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
-      - uses: coursier/setup-action@v1
+      - uses: coursier/setup-action@v3
         with:
           jvm: adoptium:1.21.0.2
           apps: sbt
       - name: Cache SBT
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             ~/.ivy2/cache
@@ -37,7 +37,7 @@ jobs:
             ~/.sbt
           key: ${{ runner.os }}-sbt-${{ hashFiles('**/*.sbt') }}
       - name: Cache Build Files
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             **/target
@@ -50,13 +50,13 @@ jobs:
           version="$(sbt --error "print coreJVM/releaseVersion" | head -n1)"
           echo -n "version=$version"
           echo -n "version=$version" >> $GITHUB_OUTPUT
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v7
         with:
-          path: modules/recheck-js/target/scala-2.13/recheck-js-opt/recheck.js
+          path: modules/recheck-js/target/scala-3.7.4/recheck-js-opt/recheck.js
           name: recheck.js
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v7
         with:
-          path: modules/recheck-cli/target/scala-2.13/recheck.jar
+          path: modules/recheck-cli/target/scala-3.7.4/recheck.jar
           name: recheck.jar
 
   scala-lint:
@@ -65,13 +65,13 @@ jobs:
     timeout-minutes: 5
     name: Scala Lint
     steps:
-      - uses: actions/checkout@v5
-      - uses: coursier/setup-action@v1
+      - uses: actions/checkout@v7
+      - uses: coursier/setup-action@v3
         with:
           jvm: adoptium:1.21.0.2
           apps: sbt
       - name: Cache SBT
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             ~/.ivy2/cache
@@ -79,7 +79,7 @@ jobs:
             ~/.sbt
           key: ${{ runner.os }}-sbt-${{ hashFiles('**/*.sbt') }}
       - name: Cache Build Files
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             **/target
@@ -92,12 +92,12 @@ jobs:
     timeout-minutes: 5
     name: Node Lint
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Install pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
         with:
           version: '10'
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: '24'
           cache: 'pnpm'
@@ -115,17 +115,17 @@ jobs:
     timeout-minutes: 5
     name: Scala Test
     steps:
-      - uses: actions/checkout@v5
-      - uses: coursier/setup-action@v1
+      - uses: actions/checkout@v7
+      - uses: coursier/setup-action@v3
         with:
           jvm: adoptium:1.21.0.2
           apps: sbt
       # This Node.js is needed for Scala tests, so we don't need to install dependencies.
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: '24'
       - name: Cache SBT
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             ~/.ivy2/cache
@@ -134,7 +134,7 @@ jobs:
           key: ${{ runner.os }}-sbt-${{ hashFiles('**/*.sbt') }}
       - name: Test
         run: sbt coverage test coverageAggregate
-      - uses: codecov/codecov-action@v5
+      - uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
 
@@ -147,30 +147,30 @@ jobs:
         node: [ 20, 22, 24 ]
     name: Node v${{ matrix.node }} Test
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Install pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
         with:
           version: '10'
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: ${{ matrix.node }}
           cache: 'pnpm'
       - name: Install
         run: pnpm install --frozen-lockfile
-      - uses: actions/download-artifact@v6
+      - uses: actions/download-artifact@v8
         with:
           name: recheck.js
-          path: modules/recheck-js/target/scala-2.13/recheck-js-opt/
-      - uses: actions/download-artifact@v6
+          path: modules/recheck-js/target/scala-3.7.4/recheck-js-opt/
+      - uses: actions/download-artifact@v8
         with:
           name: recheck.jar
-          path: modules/recheck-cli/target/scala-2.13/
+          path: modules/recheck-cli/target/scala-3.7.4/
       - name: Build
         run: pnpm -r run build
       - name: Test
         run: pnpm exec lerna run test -- --coverage --forceExit --detectOpenHandles
-      - uses: codecov/codecov-action@v5
+      - uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
 
@@ -201,15 +201,15 @@ jobs:
     timeout-minutes: 15
     name: Scala Build (Native Binary)
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
-      - uses: coursier/setup-action@v1
+      - uses: coursier/setup-action@v3
         with:
           jvm: adoptium:1.21.0.2
           apps: sbt
       - name: Cache SBT
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             ~/.ivy2/cache
@@ -217,7 +217,7 @@ jobs:
             ~/.sbt
           key: ${{ runner.os }}-sbt-${{ hashFiles('**/*.sbt') }}
       - name: Cache Build Files
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             **/target
@@ -229,7 +229,7 @@ jobs:
         shell: cmd
         run: >-
           "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat" && sbt cli/nativeImage
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v7
         with:
           path: ${{ matrix.local_path }}
           name: ${{ matrix.artifact_filename }}
@@ -241,15 +241,15 @@ jobs:
     timeout-minutes: 15
     name: Publish to Maven Central
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
-      - uses: coursier/setup-action@v1
+      - uses: coursier/setup-action@v3
         with:
           jvm: adoptium:1.21.0.2
           apps: sbt
       - name: Cache SBT
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             ~/.ivy2/cache
@@ -257,7 +257,7 @@ jobs:
             ~/.sbt
           key: ${{ runner.os }}-sbt-${{ hashFiles('**/*.sbt') }}
       - name: Cache Build Files
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             **/target
@@ -277,24 +277,24 @@ jobs:
     timeout-minutes: 15
     name: Publish to NPM
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
-      - uses: coursier/setup-action@v1
+      - uses: coursier/setup-action@v3
         with:
           jvm: adoptium:1.21.0.2
           apps: sbt
       - name: Install pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
         with:
           version: '10'
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: '24'
           cache: 'pnpm'
           registry-url: 'https://registry.npmjs.org'
       - name: Cache SBT
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             ~/.ivy2/cache
@@ -302,38 +302,38 @@ jobs:
             ~/.sbt
           key: ${{ runner.os }}-sbt-${{ hashFiles('**/*.sbt') }}
       - name: Cache Build Files
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             **/target
           key: ${{ runner.os }}-build-${{ github.sha }}
       - name: Install
         run: pnpm install --frozen-lockfile
-      - uses: actions/download-artifact@v6
+      - uses: actions/download-artifact@v8
         with:
           name: recheck.js
-          path: modules/recheck-js/target/scala-2.13/recheck-js-opt/
-      - uses: actions/download-artifact@v6
+          path: modules/recheck-js/target/scala-3.7.4/recheck-js-opt/
+      - uses: actions/download-artifact@v8
         with:
           name: recheck.jar
           path: packages/recheck-jar/
-      - uses: actions/download-artifact@v6
+      - uses: actions/download-artifact@v8
         with:
           name: recheck-darwin-x64
           path: packages/recheck-macos-x64/
-      - uses: actions/download-artifact@v6
+      - uses: actions/download-artifact@v8
         with:
           name: recheck-darwin-arm64
           path: packages/recheck-macos-arm64/
-      - uses: actions/download-artifact@v6
+      - uses: actions/download-artifact@v8
         with:
           name: recheck-linux-x64
           path: packages/recheck-linux-x64/
-      - uses: actions/download-artifact@v6
+      - uses: actions/download-artifact@v8
         with:
           name: recheck-linux-arm64
           path: packages/recheck-linux-arm64/
-      - uses: actions/download-artifact@v6
+      - uses: actions/download-artifact@v8
         with:
           name: recheck-win32-x64.exe
           path: packages/recheck-windows-x64/
@@ -357,24 +357,28 @@ jobs:
     timeout-minutes: 15
     name: Publish GitHub Release
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/download-artifact@v6
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v8
         with:
           name: recheck.jar
           path: packages/recheck-jar/
-      - uses: actions/download-artifact@v6
+      - uses: actions/download-artifact@v8
         with:
           name: recheck-darwin-x64
           path: packages/recheck-macos-x64/
-      - uses: actions/download-artifact@v6
+      - uses: actions/download-artifact@v8
         with:
           name: recheck-darwin-arm64
           path: packages/recheck-macos-arm64/
-      - uses: actions/download-artifact@v6
+      - uses: actions/download-artifact@v8
         with:
           name: recheck-linux-x64
           path: packages/recheck-linux-x64/
-      - uses: actions/download-artifact@v6
+      - uses: actions/download-artifact@v8
+        with:
+          name: recheck-linux-arm64
+          path: packages/recheck-linux-arm64/
+      - uses: actions/download-artifact@v8
         with:
           name: recheck-win32-x64.exe
           path: packages/recheck-windows-x64/
@@ -384,15 +388,17 @@ jobs:
           mv packages/recheck-macos-x64/recheck recheck-macos-x64
           mv packages/recheck-macos-arm64/recheck recheck-macos-arm64
           mv packages/recheck-linux-x64/recheck recheck-linux-x64
+          mv packages/recheck-linux-arm64/recheck recheck-linux-arm64
           mv packages/recheck-windows-x64/recheck.exe recheck-windows-x64.exe
       - name: Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           files: |
             recheck.jar
             recheck-macos-x64
             recheck-macos-arm64
             recheck-linux-x64
+            recheck-linux-arm64
             recheck-windows-x64.exe
 
   gh-pages-build:
@@ -402,19 +408,19 @@ jobs:
     timeout-minutes: 5
     name: Build website
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Install pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
         with:
           version: '10'
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: '24'
           cache: 'pnpm'
-      - uses: actions/download-artifact@v6
+      - uses: actions/download-artifact@v8
         with:
           name: recheck.js
-          path: modules/recheck-js/target/scala-2.13/recheck-js-opt/
+          path: modules/recheck-js/target/scala-3.7.4/recheck-js-opt/
       - name: Install
         run: pnpm install --frozen-lockfile
       - name: Build
@@ -422,7 +428,7 @@ jobs:
           NODE_ENV=production pnpm --filter recheck run build
           RECHECK_VERSION=${{ needs.build.outputs.version }} pnpm --filter website run doc
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@v5
         with:
           path: website/build
 
@@ -440,4 +446,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
