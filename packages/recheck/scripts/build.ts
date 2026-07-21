@@ -62,7 +62,7 @@ const scalaLoaderPlugin: Plugin = {
     build.onResolve({ filter }, (args) => {
       const path = resolve(
         process.cwd(),
-        "../../modules/recheck-js/target/scala-2.13/recheck-js-opt/recheck.js",
+        "../../modules/recheck-js/target/scala-3.7.4/recheck-js-opt/recheck.js",
       );
       return {
         external: false,
